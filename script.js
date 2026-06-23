@@ -11,7 +11,7 @@ const jpdbIml = "/api/iml";
 const jpdbIrl = "/api/irl";
 
 function executeCommandAtGivenBaseUrl(reqString, dbBaseUrl, apiEndPointUrl) {
-    var url = dbBaseUrl + apiEndPointUrl;
+    var url = "https://corsproxy.io/?url=" + encodeURIComponent(dbBaseUrl + apiEndPointUrl);
     var jsonObj;
     $.post(url, reqString, function (result) {
         jsonObj = JSON.parse(result);
