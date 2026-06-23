@@ -10,15 +10,25 @@ const jpdbBaseUrl = "http://api.login2explore.com:5577";
 const jpdbIml = "/api/iml";
 const jpdbIrl = "/api/irl";
 
-function executeCommandAtGivenBaseUrl(reqString, dbBaseUrl, apiEndPointUrl) {
-    var url = "https://corsproxy.io/?url=" + encodeURIComponent(dbBaseUrl + apiEndPointUrl);
-    var jsonObj;
-    $.post(url, reqString, function (result) {
-        jsonObj = JSON.parse(result);
-    }).fail(function (result) {
-        jsonObj = JSON.parse(result.responseText);
-    });
-    return jsonObj;
+async function executeCommandAtGivenBaseUrl(reqString, dbBaseUrl, apiEndPointUrl) {
+    const url = "https://corsproxy.io/?url=" + encodeURIComponent(dbBaseUrl + apiEndPointUrl);
+
+    try {
+        const response = await fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: reqString
+        });
+
+        const text = await response.text();   // JPDB returns string
+        return JSON.parse(text);
+
+    } catch (error) {
+        console.error("Error:", error);
+        return null;
+    }
 }
 
 function createPUTRequest(connToken, jsonObj, dbName, relName) {
