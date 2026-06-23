@@ -163,22 +163,21 @@ function validateData() {
     //remains
 }
 
-function saveData() {
+async function saveData() {
     var jsonStrObj = validateData();
-    if (jsonStrObj === "") {
-        return "";
-    }
+    if (jsonStrObj === "") return;
+
     var putRequest = createPUTRequest(conToken, jsonStrObj, empDBName, relName);
-    jQuery.ajaxSetup({async: false});
-    var resJsonObj = executeCommandAtGivenBaseUrl(putRequest, jpdbBaseUrl, jpdbIml);
-    if (resJsonObj.status === 200) {
+
+    var resJsonObj = await executeCommandAtGivenBaseUrl(putRequest, jpdbBaseUrl, jpdbIml);
+
+    if (resJsonObj && resJsonObj.status === 200) {
         alert("Data saved successfully");
     } else {
         alert("Error while saving data");
     }
-    jQuery.ajaxSetup({async: true});
+
     resetForm();
-    $("#rollNo").focus();
 }
 
 function saveRecNo2LS(jsonObj) {
